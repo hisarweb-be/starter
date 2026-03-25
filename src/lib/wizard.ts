@@ -1,0 +1,70 @@
+import { z } from "zod"
+
+import { locales } from "@/lib/site"
+
+export const moduleOptions = [
+  "homepage",
+  "blog",
+  "contact",
+  "services",
+  "portfolio",
+  "pricing",
+  "faq",
+  "about",
+] as const
+
+export const socialProviderOptions = ["google", "github"] as const
+
+export const wizardConfigSchema = z.object({
+  siteName: z.string().min(2, "Site name is required"),
+  adminEmail: z.email("Valid admin email is required"),
+  adminPassword: z
+    .string()
+    .min(8, "Password must contain at least 8 characters"),
+  databaseProvider: z.enum(["sqlite", "postgresql"]),
+  databaseUrl: z.string().min(3, "Database connection is required"),
+  industry: z.string().min(2, "Industry is required"),
+  accentColor: z.string().min(4, "Accent color is required"),
+  logoUrl: z.string().optional().default(""),
+  fontPreset: z.string().min(2, "Font preset is required"),
+  themeMode: z.enum(["light", "dark", "system"]),
+  modules: z.array(z.enum(moduleOptions)).min(1, "Select at least one module"),
+  allowRegistration: z.boolean(),
+  socialProviders: z.array(z.enum(socialProviderOptions)),
+  allowMagicLink: z.boolean(),
+  defaultLocale: z.enum(locales),
+  extraLocales: z.array(z.enum(locales)).default([]),
+})
+
+export type WizardConfigInput = z.input<typeof wizardConfigSchema>
+export type WizardConfig = z.output<typeof wizardConfigSchema>
+
+export const wizardDefaultValues: WizardConfig = {
+  siteName: "HisarWeb Starter",
+  adminEmail: "admin@hisarweb.be",
+  adminPassword: "change-me-now",
+  databaseProvider: "postgresql",
+  databaseUrl: "postgresql://postgres:postgres@localhost:5432/hisarweb",
+  industry: "agency",
+  accentColor: "#1664d8",
+  logoUrl: "",
+  fontPreset: "manrope",
+  themeMode: "system",
+  modules: ["homepage", "services", "contact", "about"],
+  allowRegistration: false,
+  socialProviders: [],
+  allowMagicLink: true,
+  defaultLocale: "nl",
+  extraLocales: ["en", "fr", "de", "tr"],
+}
+
+export const wizardStepOrder = [
+  "welcome",
+  "database",
+  "industry",
+  "branding",
+  "modules",
+  "auth",
+  "languages",
+  "confirm",
+] as const

@@ -1,0 +1,235 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "Over ons",
+    "services": "Diensten",
+    "pricing": "Prijzen",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "setup": "Setup",
+    "login": "Login",
+    "admin": "Admin"
+  },
+  "common": {
+    "roadmap": "Bekijk roadmap",
+    "contactSales": "Plan intake",
+    "openSetup": "Open setup wizard",
+    "readiness": "Sprint in uitvoering",
+    "deliverFast": "Snel leveren",
+    "launchSoon": "Klaar voor lancering",
+    "modules": "modules",
+    "languages": "talen",
+    "uptime": "productflow"
+  },
+  "header": {
+    "eyebrow": "Owner-led sprint"
+  },
+  "footer": {
+    "title": "HisarWeb bouwt een starter die als product voelt, niet als los template.",
+    "description": "Deze sprint legt de basis voor meertalige websites, setup-wizard onboarding en een Payload-first contentarchitectuur.",
+    "rights": "Alle rechten voorbehouden. HisarWeb Starter sprint basis."
+  },
+  "home": {
+    "badge": "Top expert team actief",
+    "title": "Een website starter kit die WordPress-gemak combineert met Next.js 15 power.",
+    "description": "We bouwen een branded, meertalige basis waarmee HisarWeb sneller kan leveren, consistenter kan deployen en clients later veilig kan laten updaten.",
+    "primaryCta": "Start setup flow",
+    "secondaryCta": "Bekijk planning",
+    "stats": {
+      "modulesValue": "8+",
+      "languagesValue": "2",
+      "deliveryValue": "Owner"
+    },
+    "features": {
+      "title": "Waarom deze basis telt",
+      "description": "De huidige sprint focust op schaalbare fundamenten zodat frontend, backend en operations parallel verder kunnen.",
+      "items": {
+        "wizard": {
+          "title": "Setup wizard-first",
+          "description": "De productflow start bij een begeleide configuratie in plaats van losse handmatige setupstappen."
+        },
+        "locales": {
+          "title": "NL + EN vanaf dag één",
+          "description": "Route- en contentstructuur zijn van bij de start voorzien op meertalige levering."
+        },
+        "payload": {
+          "title": "Payload-ready backend",
+          "description": "Collections, globals en helpermodules worden als veilige skeleton neergezet voor de volgende sprint."
+        },
+        "delivery": {
+          "title": "Delivery hygiene",
+          "description": "README, env-variabelen, backlog en projectstructuur worden voorbereid voor teamwerk en deployment."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Doel van deze sprint",
+      "description": "Geen losse demo, maar een basis waarop het productteam gecontroleerd kan verderbouwen.",
+      "items": {
+        "one": {
+          "quote": "We vervangen template-chaos door een productfundament dat sneller te verkopen en te onderhouden is.",
+          "author": "Product Owner",
+          "role": "HisarWeb"
+        },
+        "two": {
+          "quote": "Door i18n, backend skeleton en documentatie vroeg te zetten, vermijden we dure rework in latere sprints.",
+          "author": "Lead Engineer",
+          "role": "Platform"
+        },
+        "three": {
+          "quote": "Deze basis is gemaakt om meerdere klanteninstanties consistent te lanceren en later te updaten.",
+          "author": "Delivery Lead",
+          "role": "Operations"
+        }
+      }
+    },
+    "cta": {
+      "title": "Klaar om van starter naar product te gaan",
+      "description": "De volgende sprint kan nu veilig focussen op echte Payload-integratie, auth-wiring en de multi-step setup wizard.",
+      "primary": "Bekijk setup",
+      "secondary": "Contacteer HisarWeb"
+    }
+  },
+  "pages": {
+    "about": {
+      "eyebrow": "Over het product",
+      "title": "Gebouwd voor snelle lanceringen zonder maatwerk-chaos",
+      "description": "HisarWeb Starter is opgezet als productfundament voor agencies en servicebedrijven die voorspelbaar willen opleveren.",
+      "highlights": {
+        "one": "Branded frontend shell met duidelijke contentzones",
+        "two": "Meertalige route-architectuur voor NL en EN",
+        "three": "Voorbereid op CMS, auth en updateflows"
+      },
+      "ctaTitle": "Owner-driven productopbouw",
+      "ctaDescription": "Elke sprint levert een bruikbaar fundament op zodat verkoop, onboarding en development op één lijn blijven."
+    },
+    "blog": {
+      "eyebrow": "Blog module",
+      "title": "Content publishing krijgt hier straks zijn thuisbasis",
+      "description": "Deze blogruimte is voorbereid voor redactionele listing, filters en rijk opgemaakte detailpagina’s vanuit Payload.",
+      "highlights": {
+        "one": "Categorieën en tags als eerste contentlaag",
+        "two": "SEO-vriendelijke detailroutes",
+        "three": "Geschikt voor thought leadership en updates"
+      },
+      "ctaTitle": "Volgende stap",
+      "ctaDescription": "Na de backend sprint koppelen we posts, auteurs en zoekfilters aan deze template."
+    },
+    "contact": {
+      "eyebrow": "Contact",
+      "title": "Converteer bezoekers naar intakegesprekken",
+      "description": "De contactpagina wordt voorbereid op formulierflows, bedrijfsinfo en later e-mailautomatisering.",
+      "highlights": {
+        "one": "Ruimte voor formulier, CTA en servicegegevens",
+        "two": "Klaar voor Resend-integratie",
+        "three": "Geschikt voor lead capture per sector"
+      },
+      "ctaTitle": "Sales-ready foundation",
+      "ctaDescription": "Deze pagina wordt later verbonden met validatie, e-mailtemplates en CRM-doorstroom."
+    },
+    "services": {
+      "eyebrow": "Diensten",
+      "title": "Presenteer proposities modulair en schaalbaar",
+      "description": "Services worden later gevoed door CMS-data zodat elk klanttype een aangepaste aanbodstructuur krijgt.",
+      "highlights": {
+        "one": "Grid- of lijstweergave per sector",
+        "two": "Doorverwijzing naar detailpagina’s",
+        "three": "Klaar voor pricing- en CTA-koppeling"
+      },
+      "ctaTitle": "Composable content",
+      "ctaDescription": "De skeleton maakt het makkelijk om services later via Payload te beheren."
+    },
+    "portfolio": {
+      "eyebrow": "Portfolio",
+      "title": "Laat cases en visuals werken voor vertrouwen",
+      "description": "Portfolio krijgt later filters, projectdetailpagina’s en mediabeheer via Cloudinary/Payload.",
+      "highlights": {
+        "one": "Geschikt voor case studies en galleries",
+        "two": "Voorbereid op categorie- en tagfilters",
+        "three": "Cloudinary-ready mediaflow"
+      },
+      "ctaTitle": "Visuele geloofwaardigheid",
+      "ctaDescription": "Een sterke portfolio-module helpt HisarWeb sneller deal confidence opbouwen."
+    },
+    "pricing": {
+      "eyebrow": "Prijzen",
+      "title": "Maak pakketten helder, vergelijkbaar en verkoopbaar",
+      "description": "De pricing-template wordt later gevuld met plannen, features en call-to-actions per doelgroep.",
+      "highlights": {
+        "one": "Vergelijkbare pakketten in cards of tabellen",
+        "two": "Duidelijke CTA’s per plan",
+        "three": "Klaar voor sales messaging"
+      },
+      "ctaTitle": "Minder frictie in verkoop",
+      "ctaDescription": "Een duidelijke pricinglaag versnelt intake en kwalificatie."
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Verlaag supportdruk met duidelijke antwoorden",
+      "description": "Deze template ondersteunt later categorieën, zoekfunctie en uitbreidbare accordion-content.",
+      "highlights": {
+        "one": "Accordion-ervaring voor snelle scanbaarheid",
+        "two": "Klaar voor CMS-beheer door editors",
+        "three": "Ondersteunt sales- en supportvragen"
+      },
+      "ctaTitle": "Self-service content",
+      "ctaDescription": "FAQ-content kan later rechtstreeks uit Payload geleverd worden."
+    }
+  },
+  "setup": {
+    "eyebrow": "Setup wizard",
+    "title": "Van eerste login naar productieve website in acht stappen",
+    "description": "De wizard wordt hier als productflow uitgewerkt zodat klanten consistent en begeleid onboarden.",
+    "steps": {
+      "welcome": {
+        "title": "Welkom & admin account",
+        "description": "Initialiseer eigenaar, e-mail en sitenaam."
+      },
+      "database": {
+        "title": "Database configuratie",
+        "description": "Kies tussen SQLite lokaal of PostgreSQL in productie."
+      },
+      "industry": {
+        "title": "Branche & sector",
+        "description": "Activeer de juiste pagina’s en basislay-out per business type."
+      },
+      "branding": {
+        "title": "Styling & branding",
+        "description": "Accentkleur, logo, typografie en dark/light voorkeuren."
+      },
+      "modules": {
+        "title": "Modules activeren",
+        "description": "Schakel blog, contact, diensten, portfolio, pricing en FAQ in."
+      },
+      "auth": {
+        "title": "Authenticatie",
+        "description": "Beheer registratie, social login en magic links."
+      },
+      "languages": {
+        "title": "Talen",
+        "description": "Stel standaardtaal in en activeer extra talen."
+      },
+      "confirm": {
+        "title": "Bevestigen & genereren",
+        "description": "Vat keuzes samen en bouw de eerste websiteconfiguratie."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "eyebrow": "Login",
+      "title": "Admin en editors melden zich hier aan",
+      "description": "Deze tijdelijke flow toont de structuur voor toekomstige auth-integratie met NextAuth en Payload."
+    },
+    "register": {
+      "eyebrow": "Registratie",
+      "title": "Nieuwe gebruikersflow per site-configuratie",
+      "description": "Registratie wordt later afhankelijk van wizardinstellingen en toegangsbeleid."
+    },
+    "forgotPassword": {
+      "eyebrow": "Wachtwoord vergeten",
+      "title": "Herstel toegang zonder supportfrictie",
+      "description": "Deze flow wordt later gekoppeld aan veilige e-mailtokens en Resend templates."
+    }
+  }
+}

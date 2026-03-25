@@ -17,8 +17,22 @@ const eslintConfig = [
       ".next/**",
       "out/**",
       "build/**",
+      "docs/**",
       "next-env.d.ts",
     ],
+  },
+  {
+    rules: {
+      // Allow unused variables prefixed with _
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+    },
   },
 ];
 

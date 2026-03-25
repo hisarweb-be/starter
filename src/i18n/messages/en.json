@@ -1,0 +1,235 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "setup": "Setup",
+    "login": "Login",
+    "admin": "Admin"
+  },
+  "common": {
+    "roadmap": "View roadmap",
+    "contactSales": "Book discovery call",
+    "openSetup": "Open setup wizard",
+    "readiness": "Sprint in motion",
+    "deliverFast": "Ship faster",
+    "launchSoon": "Launch-ready",
+    "modules": "modules",
+    "languages": "languages",
+    "uptime": "delivery flow"
+  },
+  "header": {
+    "eyebrow": "Owner-led sprint"
+  },
+  "footer": {
+    "title": "HisarWeb is building a starter that behaves like a product, not a loose template.",
+    "description": "This sprint lays the groundwork for multilingual delivery, setup-wizard onboarding and a Payload-first content architecture.",
+    "rights": "All rights reserved. HisarWeb Starter sprint foundation."
+  },
+  "home": {
+    "badge": "Top expert team active",
+    "title": "A website starter kit that blends WordPress simplicity with Next.js 15 power.",
+    "description": "We are building a branded multilingual foundation that lets HisarWeb ship faster, deploy more consistently and keep client instances upgradeable later on.",
+    "primaryCta": "Start setup flow",
+    "secondaryCta": "View roadmap",
+    "stats": {
+      "modulesValue": "8+",
+      "languagesValue": "2",
+      "deliveryValue": "Owner"
+    },
+    "features": {
+      "title": "Why this foundation matters",
+      "description": "The current sprint focuses on scalable building blocks so frontend, backend and operations can keep moving in parallel.",
+      "items": {
+        "wizard": {
+          "title": "Setup wizard-first",
+          "description": "The product flow starts with guided configuration instead of scattered manual setup steps."
+        },
+        "locales": {
+          "title": "NL + EN from day one",
+          "description": "Routing and content structure are multilingual from the start instead of being retrofitted later."
+        },
+        "payload": {
+          "title": "Payload-ready backend",
+          "description": "Collections, globals and helper modules are being introduced as safe skeletons for the next sprint."
+        },
+        "delivery": {
+          "title": "Delivery hygiene",
+          "description": "README, environment variables, backlog and project structure are prepared for team execution and deployment."
+        }
+      }
+    },
+    "testimonials": {
+      "title": "Sprint outcome",
+      "description": "Not a throwaway demo, but a product-grade foundation the team can extend with confidence.",
+      "items": {
+        "one": {
+          "quote": "We are replacing template chaos with a product baseline that is faster to sell and easier to maintain.",
+          "author": "Product Owner",
+          "role": "HisarWeb"
+        },
+        "two": {
+          "quote": "By placing i18n, backend skeletons and docs early, we avoid expensive rework in later sprints.",
+          "author": "Lead Engineer",
+          "role": "Platform"
+        },
+        "three": {
+          "quote": "This foundation is designed to launch multiple client instances consistently and update them safely later on.",
+          "author": "Delivery Lead",
+          "role": "Operations"
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to move from starter to product",
+      "description": "The next sprint can now focus safely on real Payload integration, auth wiring and the multi-step setup wizard.",
+      "primary": "View setup",
+      "secondary": "Contact HisarWeb"
+    }
+  },
+  "pages": {
+    "about": {
+      "eyebrow": "About the product",
+      "title": "Built for fast launches without bespoke chaos",
+      "description": "HisarWeb Starter is being shaped as a product foundation for agencies and service businesses that want predictable delivery.",
+      "highlights": {
+        "one": "Branded frontend shell with clear content zones",
+        "two": "Multilingual route architecture for Dutch and English",
+        "three": "Prepared for CMS, auth and update flows"
+      },
+      "ctaTitle": "Owner-driven product building",
+      "ctaDescription": "Each sprint delivers usable foundations so sales, onboarding and engineering stay aligned."
+    },
+    "blog": {
+      "eyebrow": "Blog module",
+      "title": "Content publishing will live here soon",
+      "description": "This blog space is prepared for editorial listings, filters and rich-text article pages powered by Payload.",
+      "highlights": {
+        "one": "Categories and tags as the first content layer",
+        "two": "SEO-friendly detail routes",
+        "three": "Suitable for thought leadership and release notes"
+      },
+      "ctaTitle": "Next step",
+      "ctaDescription": "After the backend sprint, posts, authors and search filters will connect to this template."
+    },
+    "contact": {
+      "eyebrow": "Contact",
+      "title": "Turn visitors into discovery calls",
+      "description": "The contact page is prepared for form flows, company details and later email automation.",
+      "highlights": {
+        "one": "Space for form, CTA and service details",
+        "two": "Ready for Resend integration",
+        "three": "Suitable for sector-specific lead capture"
+      },
+      "ctaTitle": "Sales-ready foundation",
+      "ctaDescription": "This page will later connect to validation, email templates and CRM handoff."
+    },
+    "services": {
+      "eyebrow": "Services",
+      "title": "Present offers in a modular, scalable way",
+      "description": "Services will later be fed by CMS data so each client type can receive a tailored offer structure.",
+      "highlights": {
+        "one": "Grid or list views by sector",
+        "two": "Links into service detail pages",
+        "three": "Ready for pricing and CTA coupling"
+      },
+      "ctaTitle": "Composable content",
+      "ctaDescription": "The skeleton makes it easy to manage services via Payload in the next sprint."
+    },
+    "portfolio": {
+      "eyebrow": "Portfolio",
+      "title": "Let visual proof build confidence",
+      "description": "Portfolio will later gain filters, project detail pages and media management through Cloudinary and Payload.",
+      "highlights": {
+        "one": "Suitable for case studies and galleries",
+        "two": "Prepared for categories and tags",
+        "three": "Cloudinary-ready media flow"
+      },
+      "ctaTitle": "Visual credibility",
+      "ctaDescription": "A strong portfolio module helps HisarWeb build deal confidence faster."
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Make packages clear, comparable and sellable",
+      "description": "The pricing template will later be filled with plans, features and calls to action per audience.",
+      "highlights": {
+        "one": "Comparable packages in cards or tables",
+        "two": "Clear CTA paths per plan",
+        "three": "Ready for sales messaging"
+      },
+      "ctaTitle": "Less sales friction",
+      "ctaDescription": "A strong pricing layer accelerates discovery and qualification."
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Reduce support pressure with clear answers",
+      "description": "This template will later support categories, search and expandable accordion content.",
+      "highlights": {
+        "one": "Accordion experience for quick scanning",
+        "two": "Ready for editor-managed CMS content",
+        "three": "Supports sales and support questions"
+      },
+      "ctaTitle": "Self-service content",
+      "ctaDescription": "FAQ content can later be delivered directly from Payload."
+    }
+  },
+  "setup": {
+    "eyebrow": "Setup wizard",
+    "title": "From first login to productive website in eight guided steps",
+    "description": "The wizard is shaped here as a product flow so clients onboard consistently and with confidence.",
+    "steps": {
+      "welcome": {
+        "title": "Welcome & admin account",
+        "description": "Initialize owner identity, email and site name."
+      },
+      "database": {
+        "title": "Database configuration",
+        "description": "Choose between local SQLite and production PostgreSQL."
+      },
+      "industry": {
+        "title": "Industry & sector",
+        "description": "Activate the right pages and layout defaults per business type."
+      },
+      "branding": {
+        "title": "Styling & branding",
+        "description": "Accent color, logo, typography and dark/light preferences."
+      },
+      "modules": {
+        "title": "Module activation",
+        "description": "Enable blog, contact, services, portfolio, pricing and FAQ."
+      },
+      "auth": {
+        "title": "Authentication",
+        "description": "Control registration, social login and magic links."
+      },
+      "languages": {
+        "title": "Languages",
+        "description": "Pick the default locale and activate additional locales."
+      },
+      "confirm": {
+        "title": "Confirm & generate",
+        "description": "Review choices and build the first website configuration."
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "eyebrow": "Login",
+      "title": "Admins and editors sign in here",
+      "description": "This temporary flow shows the structure for future auth integration with NextAuth and Payload."
+    },
+    "register": {
+      "eyebrow": "Register",
+      "title": "New user flow based on site configuration",
+      "description": "Registration will later depend on wizard settings and access policy."
+    },
+    "forgotPassword": {
+      "eyebrow": "Forgot password",
+      "title": "Recover access without support friction",
+      "description": "This flow will later connect to secure email tokens and Resend templates."
+    }
+  }
+}

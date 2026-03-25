@@ -1,0 +1,34 @@
+# HisarWeb Design | Digital Partner - www.hisarweb.be
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: hisarweb-app
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://hisarweb:securepassword@db:5432/hisarweb_db
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - NODE_ENV=production
+    depends_on:
+      - db
+    restart: always
+
+  db:
+    image: postgres:16-alpine
+    container_name: hisarweb-db
+    environment:
+      POSTGRES_USER: hisarweb
+      POSTGRES_PASSWORD: securepassword
+      POSTGRES_DB: hisarweb_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
