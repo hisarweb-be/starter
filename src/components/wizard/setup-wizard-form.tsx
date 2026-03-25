@@ -14,7 +14,7 @@ import {
   Sparkles,
   Wand2,
 } from "lucide-react"
-import { useEffect, useMemo, useState, useTransition } from "react"
+import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
 import { saveWizardConfigAction } from "@/app/actions/wizard"
@@ -216,7 +216,7 @@ export function SetupWizardForm() {
 
   const values = form.watch()
   const currentStepConfig = stepDefinitions[currentStep]
-  const progress = Math.round(((currentStep + 1) / stepDefinitions.length) * 100)
+  const progress = Math.round((currentStep / (stepDefinitions.length - 1)) * 100)
   const completedSteps = currentStep
   const selectedModules = values.modules ?? []
   const selectedProviders = values.socialProviders ?? []
@@ -313,6 +313,15 @@ export function SetupWizardForm() {
       shouldValidate: true,
     })
   }
+
+  const generatePassword = useCallback(() => {
+    const chars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%&*"
+    let pw = ""
+    const array = new Uint32Array(16)
+    crypto.getRandomValues(array)
+    for (let i = 0; i < 16; i++) pw += chars[array[i] % chars.length]
+    form.setValue("adminPassword", pw, { shouldDirty: true, shouldValidate: true })
+  }, [form])
 
   async function handleSubmit(submittedValues: WizardConfigInput) {
     startTransition(async () => {
@@ -444,8 +453,8 @@ export function SetupWizardForm() {
           <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
               {currentStep === 0 ? (
-                <div className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-                  <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+                  <div className="space-y-4">
                     <Field>
                       <Label htmlFor="siteName">Website naam</Label>
                       <Input
@@ -465,14 +474,26 @@ export function SetupWizardForm() {
                       />
                       <FieldError message={form.formState.errors.adminEmail?.message} />
                     </Field>
-                    <Field className="md:col-span-2">
+                    <Field>
                       <Label htmlFor="adminPassword">Admin wachtwoord</Label>
-                      <Input
-                        id="adminPassword"
-                        type="password"
-                        {...form.register("adminPassword")}
-                        className="h-11 rounded-2xl bg-background/75"
-                      />
+                      <div className="flex gap-2">
+                        <Input
+                          id="adminPassword"
+                          type="text"
+                          placeholder="Minimaal 8 tekens"
+                          {...form.register("adminPassword")}
+                          className="h-11 flex-1 rounded-2xl bg-background/75"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="h-11 shrink-0 rounded-2xl"
+                          onClick={generatePassword}
+                        >
+                          <Wand2 className="mr-2 size-4" />
+                          Genereer
+                        </Button>
+                      </div>
                       <FieldError message={form.formState.errors.adminPassword?.message} />
                     </Field>
                   </div>
@@ -657,10 +678,22 @@ export function SetupWizardForm() {
                         <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
                           Live direction
                         </p>
-                        <div className="mt-4 rounded-[1.5rem] border border-border/60 bg-background p-5">
+                        <div
+                          className={cn(
+                            "mt-4 rounded-[1.5rem] border border-border/60 p-5 transition-colors duration-300",
+                            values.themeMode === "dark"
+                              ? "bg-zinc-950 text-white"
+                              : values.themeMode === "light"
+                                ? "bg-white text-zinc-900"
+                                : "bg-background"
+                          )}
+                        >
                           <div
                             className="rounded-[1.25rem] px-4 py-5 text-white shadow-sm"
-                            style={{ backgroundColor: values.accentColor }}
+                            style={{
+                              backgroundColor: values.accentColor,
+                              fontFamily: values.fontPreset === "geist" ? "var(--font-geist-sans), system-ui" : values.fontPreset === "inter" ? "Inter, system-ui" : "Manrope, system-ui",
+                            }}
                           >
                             <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-white/70">
                               Preview
@@ -868,13 +901,26 @@ export function SetupWizardForm() {
                   </div>
 
                   <div className="rounded-[1.6rem] border border-primary/20 bg-primary/7 p-5">
-                    <p className="font-medium text-foreground">
-                      Klaar om de configuratie op te slaan.
-                    </p>
-                    <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                      Na opslaan wordt deze blueprint gebruikt als runtime basis voor site-instellingen,
-                      auth-voorkeuren en locale-setup.
-                    </p>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="font-medium text-foreground">
+                          Klaar om de configuratie op te slaan.
+                        </p>
+                        <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                          Na opslaan wordt deze blueprint gebruikt als runtime basis voor site-instellingen,
+                          auth-voorkeuren en locale-setup.
+                        </p>
+                      </div>
+                      <Button
+                        type="submit"
+                        size="lg"
+                        disabled={isPending}
+                        className="shrink-0 rounded-2xl"
+                      >
+                        <Rocket className="mr-2 size-4" />
+                        {isPending ? "Opslaan..." : "Website genereren"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ) : null}

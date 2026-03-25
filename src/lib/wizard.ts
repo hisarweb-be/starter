@@ -42,7 +42,7 @@ export type WizardConfig = z.output<typeof wizardConfigSchema>
 export const wizardDefaultValues: WizardConfig = {
   siteName: "HisarWeb Starter",
   adminEmail: "admin@hisarweb.be",
-  adminPassword: "change-me-now",
+  adminPassword: "",
   databaseProvider: "postgresql",
   databaseUrl: "postgresql://postgres:postgres@localhost:5432/hisarweb",
   industry: "agency",

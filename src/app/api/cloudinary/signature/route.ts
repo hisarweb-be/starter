@@ -6,10 +6,11 @@ import { cloudinaryConfig, hasCloudinaryConfig } from "@/lib/cloudinary"
 import { canManageSetup } from "@/lib/server/authorization-server"
 
 export async function POST(request: Request) {
+  const setupComplete = process.env.NEXT_PUBLIC_SETUP_COMPLETE === "true"
   const session = await auth()
   const hasAccess = await canManageSetup(session)
 
-  if (!hasAccess) {
+  if (!hasAccess && setupComplete) {
     return NextResponse.json(
       { error: "You are not allowed to manage setup uploads." },
       { status: 403 }

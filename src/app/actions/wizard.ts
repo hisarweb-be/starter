@@ -6,10 +6,11 @@ import { saveWizardConfig } from "@/lib/server/wizard-store"
 import { wizardConfigSchema, type WizardConfigInput } from "@/lib/wizard"
 
 export async function saveWizardConfigAction(input: WizardConfigInput) {
+  const setupComplete = process.env.NEXT_PUBLIC_SETUP_COMPLETE === "true"
   const session = await auth()
   const hasAccess = await canManageSetup(session)
 
-  if (!hasAccess) {
+  if (!hasAccess && setupComplete) {
     return {
       success: false,
       message: "De setup wizard is al vergrendeld. Meld aan als admin om wijzigingen te maken.",
