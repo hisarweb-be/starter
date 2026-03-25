@@ -3,9 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Check,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  Copy,
   Database,
+  ExternalLink,
   Globe2,
   Layers3,
   Palette,
@@ -14,6 +17,7 @@ import {
   Sparkles,
   Wand2,
 } from "lucide-react"
+import Link from "next/link"
 import { useCallback, useEffect, useMemo, useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 
@@ -346,6 +350,76 @@ export function SetupWizardForm() {
         setResultState("error")
       }
     })
+  }
+
+  if (resultState === "success") {
+    return (
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-10 sm:py-14">
+        <section className="surface-panel rounded-[2rem] px-5 py-8 sm:px-8 sm:py-10">
+          <div className="flex flex-col items-center text-center">
+            <div className="flex size-16 items-center justify-center rounded-full bg-primary/10">
+              <CheckCircle2 className="size-8 text-primary" />
+            </div>
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight">
+              Setup voltooid!
+            </h1>
+            <p className="mt-3 max-w-md text-sm leading-7 text-muted-foreground">
+              De configuratie is opgeslagen. Volg onderstaande stappen om je site live te zetten.
+            </p>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            <SetupNextStep
+              step={1}
+              title="Stel de environment variable in"
+              description="Ga naar Vercel → Project Settings → Environment Variables en voeg toe:"
+            >
+              <CopyableCode value="NEXT_PUBLIC_SETUP_COMPLETE=true" />
+            </SetupNextStep>
+
+            <SetupNextStep
+              step={2}
+              title="Redeploy de applicatie"
+              description="Na het instellen van de env var, klik op Redeploy in Vercel zodat de wijziging actief wordt."
+            />
+
+            <SetupNextStep
+              step={3}
+              title="Login als admin"
+              description="Gebruik je admin credentials om in te loggen op het dashboard:"
+            >
+              <div className="mt-2 space-y-1.5">
+                <CopyableCode value={values.adminEmail} label="Email" />
+                <p className="text-xs text-muted-foreground">
+                  Wachtwoord: het wachtwoord dat je in stap 1 hebt ingesteld.
+                </p>
+              </div>
+            </SetupNextStep>
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button
+              variant="outline"
+              className="rounded-2xl"
+              onClick={() => {
+                setResultState(null)
+                setResultMessage(null)
+              }}
+            >
+              <ChevronLeft className="mr-2 size-4" />
+              Terug naar wizard
+            </Button>
+            <Link
+              href="/nl/login"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-2xl bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Naar login
+              <ExternalLink className="size-4" />
+            </Link>
+          </div>
+        </section>
+      </div>
+    )
   }
 
   return (
@@ -1023,15 +1097,8 @@ export function SetupWizardForm() {
                 </div>
               ) : null}
 
-              {resultMessage ? (
-                <div
-                  className={cn(
-                    "rounded-[1.5rem] border px-4 py-3 text-sm",
-                    resultState === "success"
-                      ? "border-primary/20 bg-primary/7 text-foreground"
-                      : "border-destructive/20 bg-destructive/10 text-destructive"
-                  )}
-                >
+              {resultMessage && resultState === "error" ? (
+                <div className="rounded-[1.5rem] border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
                   {resultMessage}
                 </div>
               ) : null}
@@ -1196,6 +1263,50 @@ function SummaryPreview({ label, value }: { label: string; value: string }) {
         {label}
       </p>
       <p className="mt-1 text-sm font-medium text-foreground">{value}</p>
+    </div>
+  )
+}
+
+function SetupNextStep({
+  step,
+  title,
+  description,
+  children,
+}: {
+  step: number
+  title: string
+  description: string
+  children?: React.ReactNode
+}) {
+  return (
+    <div className="flex gap-4 rounded-[1.5rem] border border-border/60 bg-card/70 p-5">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+        {step}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold text-foreground">{title}</p>
+        <p className="mt-1 text-sm leading-6 text-muted-foreground">{description}</p>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function CopyableCode({ value, label }: { value: string; label?: string }) {
+  return (
+    <div className="mt-2 flex items-center gap-2 rounded-xl border border-border/60 bg-muted/50 px-3 py-2">
+      {label ? (
+        <span className="shrink-0 text-xs text-muted-foreground">{label}:</span>
+      ) : null}
+      <code className="flex-1 truncate font-mono text-sm text-foreground">{value}</code>
+      <button
+        type="button"
+        onClick={() => void navigator.clipboard.writeText(value)}
+        className="shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+        aria-label="Kopieer"
+      >
+        <Copy className="size-3.5" />
+      </button>
     </div>
   )
 }

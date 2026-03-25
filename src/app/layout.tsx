@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { Geist, IBM_Plex_Mono, Inter, Manrope, Sora } from "next/font/google"
+import { GeistSans } from "geist/font/sans"
+import { IBM_Plex_Mono, Inter, Manrope, Sora } from "next/font/google"
 
 import { AnalyticsScripts } from "@/components/providers/analytics-scripts"
 import { ThemeProvider } from "@/components/providers/theme-provider"
@@ -19,11 +20,6 @@ const sora = Sora({
 
 const inter = Inter({
   variable: "--font-inter",
-  subsets: ["latin"],
-})
-
-const geist = Geist({
-  variable: "--font-geist-sans",
   subsets: ["latin"],
 })
 
@@ -61,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="nl" suppressHydrationWarning>
       <body
-        className={`${manrope.variable} ${sora.variable} ${inter.variable} ${geist.variable} ${ibmPlexMono.variable} bg-background text-foreground antialiased`}
+        className={`${manrope.variable} ${sora.variable} ${inter.variable} ${GeistSans.variable} ${ibmPlexMono.variable} bg-background text-foreground antialiased`}
       >
         <ThemeProvider
           attribute="class"
