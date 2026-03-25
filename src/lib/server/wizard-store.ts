@@ -10,7 +10,7 @@ import { wizardConfigSchema, type WizardConfig } from "@/lib/wizard"
 
 const wizardStorePath = getDataPath("wizard-config.json")
 
-export type PersistedWizardConfig = Omit<WizardConfig, "adminPassword"> & {
+export type PersistedWizardConfig = Omit<WizardConfig, "adminPassword" | "databaseConfigured"> & {
   adminPasswordHash: string
   updatedAt: string
 }
@@ -19,8 +19,7 @@ type WizardConfigRecord = {
   siteName: string
   adminEmail: string
   adminPasswordHash: string
-  databaseProvider: string
-  databaseUrl: string
+  supabaseProjectId?: string | null
   industry: string
   accentColor: string
   accentColorDark: string | null
@@ -40,8 +39,7 @@ function normalizeWizardRecord(record: {
   siteName: string
   adminEmail: string
   adminPasswordHash: string
-  databaseProvider: string
-  databaseUrl: string
+  supabaseProjectId?: string | null
   industry: string
   accentColor: string
   accentColorDark?: string | null
@@ -60,8 +58,6 @@ function normalizeWizardRecord(record: {
     siteName: record.siteName,
     adminEmail: record.adminEmail,
     adminPasswordHash: record.adminPasswordHash,
-    databaseProvider: record.databaseProvider as "sqlite" | "postgresql",
-    databaseUrl: record.databaseUrl,
     industry: record.industry,
     accentColor: record.accentColor,
     accentColorDark: record.accentColorDark ?? "",
@@ -128,46 +124,35 @@ export async function saveWizardConfig(input: WizardConfig) {
         }
       }
 
+      const updateData: Record<string, unknown> = {
+        siteName: persisted.siteName,
+        adminEmail: persisted.adminEmail,
+        adminPasswordHash: persisted.adminPasswordHash,
+        industry: persisted.industry,
+        accentColor: persisted.accentColor,
+        accentColorDark: persisted.accentColorDark ?? null,
+        logoUrl: persisted.logoUrl,
+        fontPreset: persisted.fontPreset,
+        themeMode: persisted.themeMode,
+        enabledModules: persisted.modules,
+        socialProviders: persisted.socialProviders,
+        allowRegistration: persisted.allowRegistration,
+        enableMagicLink: persisted.allowMagicLink,
+        defaultLocale: persisted.defaultLocale,
+        extraLocales: persisted.extraLocales,
+      }
+
+      // Include supabaseProjectId if it exists in the input
+      if (input.supabaseProjectId) {
+        updateData.supabaseProjectId = input.supabaseProjectId
+      }
+
       const record = await db.wizardConfig.upsert({
         where: { id: "singleton" },
-        update: {
-          siteName: persisted.siteName,
-          adminEmail: persisted.adminEmail,
-          adminPasswordHash: persisted.adminPasswordHash,
-          databaseProvider: persisted.databaseProvider,
-          databaseUrl: persisted.databaseUrl,
-          industry: persisted.industry,
-          accentColor: persisted.accentColor,
-          accentColorDark: persisted.accentColorDark ?? null,
-          logoUrl: persisted.logoUrl,
-          fontPreset: persisted.fontPreset,
-          themeMode: persisted.themeMode,
-          enabledModules: persisted.modules,
-          socialProviders: persisted.socialProviders,
-          allowRegistration: persisted.allowRegistration,
-          enableMagicLink: persisted.allowMagicLink,
-          defaultLocale: persisted.defaultLocale,
-          extraLocales: persisted.extraLocales,
-        },
+        update: updateData,
         create: {
           id: "singleton",
-          siteName: persisted.siteName,
-          adminEmail: persisted.adminEmail,
-          adminPasswordHash: persisted.adminPasswordHash,
-          databaseProvider: persisted.databaseProvider,
-          databaseUrl: persisted.databaseUrl,
-          industry: persisted.industry,
-          accentColor: persisted.accentColor,
-          accentColorDark: persisted.accentColorDark ?? null,
-          logoUrl: persisted.logoUrl,
-          fontPreset: persisted.fontPreset,
-          themeMode: persisted.themeMode,
-          enabledModules: persisted.modules,
-          socialProviders: persisted.socialProviders,
-          allowRegistration: persisted.allowRegistration,
-          enableMagicLink: persisted.allowMagicLink,
-          defaultLocale: persisted.defaultLocale,
-          extraLocales: persisted.extraLocales,
+          ...updateData,
         },
       })
 

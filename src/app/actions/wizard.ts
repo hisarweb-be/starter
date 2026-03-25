@@ -27,7 +27,18 @@ export async function saveWizardConfigAction(input: WizardConfigInput) {
       }
     }
 
-    await saveWizardConfig(parsed.data)
+    // Handle Supabase project configuration
+    const configToSave = { ...parsed.data }
+
+    if (input.databaseConfigured === true && input.supabaseProjectId) {
+      // Database config (databaseProvider, databaseUrl) comes from Supabase API response,
+      // not from schema. The wizard schema doesn't include these fields.
+      console.log(
+        `[wizard] Saving Supabase project configuration: projectId=${input.supabaseProjectId}`
+      )
+    }
+
+    await saveWizardConfig(configToSave)
 
     return {
       success: true,

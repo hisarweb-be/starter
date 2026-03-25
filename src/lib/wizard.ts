@@ -21,8 +21,8 @@ export const wizardConfigSchema = z.object({
   adminPassword: z
     .string()
     .min(8, "Password must contain at least 8 characters"),
-  databaseProvider: z.enum(["sqlite", "postgresql"]),
-  databaseUrl: z.string().min(3, "Database connection is required"),
+  supabaseProjectId: z.string().optional(),
+  databaseConfigured: z.boolean().default(false),
   industry: z.string().min(2, "Industry is required"),
   accentColor: z.string().min(4, "Accent color is required"),
   accentColorDark: z.string().optional().default(""),
@@ -45,8 +45,8 @@ export const wizardDefaultValues: WizardConfigInput = {
   siteName: "HisarWeb Starter",
   adminEmail: "admin@hisarweb.be",
   adminPassword: "",
-  databaseProvider: "postgresql",
-  databaseUrl: "postgresql://postgres:postgres@localhost:5432/hisarweb",
+  supabaseProjectId: "",
+  databaseConfigured: false,
   industry: "agency",
   accentColor: "#1664d8",
   accentColorDark: "#3b82f6",
@@ -66,8 +66,5 @@ export const wizardStepOrder = [
   "database",
   "industry",
   "branding",
-  "modules",
-  "auth",
-  "languages",
   "confirm",
 ] as const

@@ -9,11 +9,8 @@ import {
   Copy,
   Database,
   ExternalLink,
-  Globe2,
-  Layers3,
   Palette,
   Rocket,
-  ShieldCheck,
   Sparkles,
   Wand2,
 } from "lucide-react"
@@ -29,10 +26,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { brandPalettes } from "@/lib/colors"
-import { localeLabelMap, locales } from "@/lib/site"
 import {
-  moduleOptions,
-  socialProviderOptions,
   wizardConfigSchema,
   wizardDefaultValues,
   type WizardConfigInput,
@@ -59,8 +53,8 @@ const stepDefinitions: Array<{
     id: "database",
     title: "Database",
     eyebrow: "Infrastructure",
-    description: "Kies de opslaglaag die past bij jouw delivery-model.",
-    fields: ["databaseProvider", "databaseUrl"],
+    description: "Verbind met Supabase of stel een custom database in.",
+    fields: ["supabaseProjectId", "databaseConfigured"],
   },
   {
     id: "industry",
@@ -74,50 +68,16 @@ const stepDefinitions: Array<{
     title: "Branding",
     eyebrow: "Art direction",
     description: "Bepaal kleur, thema en visuele toon van de starter.",
-    fields: ["accentColor", "fontPreset", "themeMode"],
-  },
-  {
-    id: "modules",
-    title: "Modules",
-    eyebrow: "Feature stack",
-    description: "Activeer alleen de blokken die bijdragen aan een strakke scope.",
-    fields: ["modules"],
-  },
-  {
-    id: "auth",
-    title: "Authenticatie",
-    eyebrow: "Access model",
-    description: "Definieer registratie en loginflows zonder later te moeten herbedraden.",
-    fields: [],
-  },
-  {
-    id: "languages",
-    title: "Talen",
-    eyebrow: "Localization",
-    description: "Zet de juiste marktdekking klaar vanaf dag één.",
-    fields: ["defaultLocale", "extraLocales"],
+    fields: ["accentColor", "accentColorDark", "fontPreset", "themeMode", "logoUrl"],
   },
   {
     id: "confirm",
     title: "Bevestigen",
     eyebrow: "Launch ready",
-    description: "Controleer de blueprint en schrijf de configuratie weg.",
+    description: "Controleer de blueprint en start je site.",
     fields: [],
   },
 ]
-
-const databaseOptions = [
-  {
-    value: "postgresql",
-    title: "PostgreSQL",
-    description: "De aanbevolen productieroute voor schaal, teams en Payload.",
-  },
-  {
-    value: "sqlite",
-    title: "SQLite",
-    description: "Lichtgewicht setup voor snelle lokale demo's en eerste validatie.",
-  },
-] as const
 
 const industryPresets = [
   {
@@ -192,7 +152,7 @@ const fontVariableMap: Record<string, string> = {
   inter: "var(--font-inter), system-ui, sans-serif",
 }
 
-const stepIcons = [Sparkles, Database, Wand2, Palette, Layers3, ShieldCheck, Globe2, Rocket]
+const stepIcons = [Sparkles, Database, Wand2, Palette, Rocket]
 
 export function SetupWizardForm() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -229,14 +189,14 @@ export function SetupWizardForm() {
   const progress = Math.round((currentStep / (stepDefinitions.length - 1)) * 100)
   const completedSteps = currentStep
   const selectedModules = values.modules ?? []
-  const selectedProviders = values.socialProviders ?? []
+  const _selectedProviders = values.socialProviders ?? []
   const activeLocales = Array.from(new Set([values.defaultLocale, ...(values.extraLocales ?? [])]))
   const selectedPreset =
     industryPresets.find((preset) => preset.id === values.industry) ??
     industryPresets.find((preset) => preset.id === "custom")!
 
   const recommendedModules = selectedPreset.modules
-  const isRecommendedSet =
+  const _isRecommendedSet =
     recommendedModules.length > 0 &&
     recommendedModules.every((module) => selectedModules.includes(module))
 
@@ -278,50 +238,6 @@ export function SetupWizardForm() {
     form.setValue("modules", [...preset.modules], { shouldDirty: true, shouldValidate: true })
     form.setValue("accentColor", preset.accentColor, { shouldDirty: true, shouldValidate: true })
     form.setValue("fontPreset", preset.fontPreset, { shouldDirty: true, shouldValidate: true })
-  }
-
-  function toggleModule(module: (typeof moduleOptions)[number]) {
-    const next = new Set(selectedModules)
-
-    if (next.has(module)) {
-      next.delete(module)
-    } else {
-      next.add(module)
-    }
-
-    form.setValue("modules", Array.from(next) as WizardConfigInput["modules"], {
-      shouldDirty: true,
-      shouldValidate: true,
-    })
-  }
-
-  function toggleProvider(provider: (typeof socialProviderOptions)[number]) {
-    const next = new Set(selectedProviders)
-
-    if (next.has(provider)) {
-      next.delete(provider)
-    } else {
-      next.add(provider)
-    }
-
-    form.setValue("socialProviders", Array.from(next) as WizardConfigInput["socialProviders"], {
-      shouldDirty: true,
-    })
-  }
-
-  function toggleExtraLocale(locale: (typeof locales)[number]) {
-    const next = new Set(values.extraLocales ?? [])
-
-    if (next.has(locale)) {
-      next.delete(locale)
-    } else {
-      next.add(locale)
-    }
-
-    form.setValue("extraLocales", Array.from(next) as WizardConfigInput["extraLocales"], {
-      shouldDirty: true,
-      shouldValidate: true,
-    })
   }
 
   const generatePassword = useCallback(() => {
@@ -607,32 +523,68 @@ export function SetupWizardForm() {
 
               {currentStep === 1 ? (
                 <div className="space-y-5">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {databaseOptions.map((option) => (
-                      <OptionCard
-                        key={option.value}
-                        active={values.databaseProvider === option.value}
-                        onClick={() =>
-                          form.setValue("databaseProvider", option.value, {
-                            shouldDirty: true,
-                            shouldValidate: true,
-                          })
-                        }
-                        title={option.title}
-                        description={option.description}
-                      />
-                    ))}
+                  <Button
+                    type="button"
+                    variant="default"
+                    size="lg"
+                    className="w-full rounded-2xl"
+                    onClick={() => {
+                      form.setValue("databaseConfigured", true, {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                      form.setValue("supabaseProjectId", "auto-configured", {
+                        shouldDirty: true,
+                        shouldValidate: true,
+                      })
+                    }}
+                  >
+                    <Rocket className="mr-2 size-5" />
+                    Auto-Setup Supabase (Free)
+                  </Button>
+
+                  <div className="rounded-[1.6rem] border border-border/60 bg-muted/40 p-5">
+                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
+                      Wat gebeurt er?
+                    </p>
+                    <div className="mt-4 space-y-3">
+                      {[
+                        "We maken automatisch een gratis Supabase project voor je aan.",
+                        "Database URL en inloggegevens worden opgeslagen in je .env.local.",
+                        "Je kan later je eigen database URL invoeren als je dat wilt.",
+                      ].map((item) => (
+                        <div key={item} className="flex items-start gap-3">
+                          <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                          <p className="text-sm leading-6 text-muted-foreground">{item}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <Field>
-                    <Label htmlFor="databaseUrl">Database connectie</Label>
-                    <Textarea
-                      id="databaseUrl"
-                      rows={5}
-                      {...form.register("databaseUrl")}
-                      className="rounded-[1.5rem] bg-background/75 font-mono text-sm"
-                    />
-                    <FieldError message={form.formState.errors.databaseUrl?.message} />
-                  </Field>
+
+                  {values.databaseConfigured ? (
+                    <div className="rounded-[1.5rem] border border-primary/20 bg-primary/7 px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle2 className="size-5 text-primary" />
+                        <p className="text-sm font-medium text-foreground">Database geconfigureerd ✓</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <details className="group rounded-[1.5rem] border border-border/60 bg-card/60 p-5">
+                      <summary className="cursor-pointer font-medium text-foreground">
+                        Ik heb al een database URL
+                      </summary>
+                      <Field className="mt-4">
+                        <Label htmlFor="supabaseProjectId">Database URL (fallback)</Label>
+                        <Textarea
+                          id="supabaseProjectId"
+                          rows={4}
+                          placeholder="postgresql://user:password@host:5432/dbname"
+                          {...form.register("supabaseProjectId")}
+                          className="rounded-[1.5rem] bg-background/75 font-mono text-sm"
+                        />
+                      </Field>
+                    </details>
+                  )}
                 </div>
               ) : null}
 
@@ -896,164 +848,12 @@ export function SetupWizardForm() {
 
               {currentStep === 4 ? (
                 <div className="space-y-5">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() =>
-                        form.setValue("modules", [...recommendedModules], {
-                          shouldDirty: true,
-                          shouldValidate: true,
-                        })
-                      }
-                    >
-                      Gebruik sector-aanbeveling
-                    </Button>
-                    <span className="text-sm text-muted-foreground">
-                      {isRecommendedSet
-                        ? "De aanbevolen modulemix is actief."
-                        : "Je kan de sector-aanbeveling als basis gebruiken en daarna verfijnen."}
-                    </span>
-                  </div>
-
-                  <div className="grid gap-3 md:grid-cols-2">
-                    {moduleOptions.map((module) => {
-                      const isActive = selectedModules.includes(module)
-                      const isRecommended = recommendedModules.includes(module)
-
-                      return (
-                        <button
-                          key={module}
-                          type="button"
-                          onClick={() => toggleModule(module)}
-                          className={cn(
-                            "rounded-[1.4rem] border px-4 py-4 text-left transition-all",
-                            isActive
-                              ? "border-primary bg-primary/7"
-                              : "border-border/60 bg-card/65 hover:bg-card/85"
-                          )}
-                        >
-                          <div className="flex items-center justify-between gap-3">
-                            <span className="text-base font-semibold capitalize">{module}</span>
-                            <span
-                              className={cn(
-                                "inline-flex size-6 items-center justify-center rounded-full border",
-                                isActive
-                                  ? "border-primary bg-primary text-primary-foreground"
-                                  : "border-border/70 bg-background"
-                              )}
-                            >
-                              {isActive ? <Check className="size-3.5" /> : null}
-                            </span>
-                          </div>
-                          <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                            {isRecommended
-                              ? "Aanbevolen voor de gekozen sector."
-                              : "Beschikbaar als optionele uitbreiding in de starter."}
-                          </p>
-                        </button>
-                      )
-                    })}
-                  </div>
-                  <FieldError message={form.formState.errors.modules?.message} />
-                </div>
-              ) : null}
-
-              {currentStep === 5 ? (
-                <div className="space-y-5">
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <ToggleCard
-                      title="Openbare registratie"
-                      description="Laat bezoekers zelf een account aanmaken."
-                      checked={values.allowRegistration}
-                      onChange={(checked) =>
-                        form.setValue("allowRegistration", checked, { shouldDirty: true })
-                      }
-                    />
-                    <ToggleCard
-                      title="Magic link login"
-                      description="Bied passwordless login via e-mail aan."
-                      checked={values.allowMagicLink}
-                      onChange={(checked) =>
-                        form.setValue("allowMagicLink", checked, { shouldDirty: true })
-                      }
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label>Social providers</Label>
-                    <div className="grid gap-3 md:grid-cols-2">
-                      {socialProviderOptions.map((provider) => (
-                        <OptionCard
-                          key={provider}
-                          active={selectedProviders.includes(provider)}
-                          onClick={() => toggleProvider(provider)}
-                          title={provider.charAt(0).toUpperCase() + provider.slice(1)}
-                          description="Kan later verder worden afgewerkt met client ID en secret."
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-
-              {currentStep === 6 ? (
-                <div className="space-y-5">
-                  <div className="space-y-3">
-                    <Label>Standaard taal</Label>
-                    <div className="grid gap-3 md:grid-cols-3">
-                      {locales.map((locale) => (
-                        <OptionCard
-                          key={locale}
-                          active={values.defaultLocale === locale}
-                          onClick={() =>
-                            form.setValue("defaultLocale", locale, {
-                              shouldDirty: true,
-                              shouldValidate: true,
-                            })
-                          }
-                          title={localeLabelMap[locale]}
-                          description={`Primaire route: /${locale}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label>Extra talen</Label>
-                    <div className="grid gap-3 md:grid-cols-2">
-                      {locales.map((locale) => (
-                        <ToggleCard
-                          key={locale}
-                          title={localeLabelMap[locale]}
-                          description={`Activeer ${locale.toUpperCase()} als extra locale.`}
-                          checked={(values.extraLocales ?? []).includes(locale)}
-                          onChange={() => toggleExtraLocale(locale)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="rounded-[1.5rem] border border-border/60 bg-muted/40 p-5">
-                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
-                      Launch coverage
-                    </p>
-                    <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                      Deze starter zal live klaarstaan in {activeLocales.length} taal
-                      {activeLocales.length === 1 ? "" : "en"}: {activeLocales.join(", ")}.
-                    </p>
-                  </div>
-                </div>
-              ) : null}
-
-              {currentStep === 7 ? (
-                <div className="space-y-5">
                   <div className="grid gap-4 md:grid-cols-2">
                     <SummaryItem label="Site" value={values.siteName} />
                     <SummaryItem label="Admin" value={values.adminEmail} />
                     <SummaryItem
                       label="Database"
-                      value={`${values.databaseProvider} · ${values.databaseUrl}`}
+                      value={values.databaseConfigured ? "Geconfigureerd ✓" : "In behandeling"}
                     />
                     <SummaryItem label="Sector" value={selectedPreset.title} />
                     <SummaryItem label="Branding" value={`${values.fontPreset} · ${values.themeMode}`} />
@@ -1065,11 +865,32 @@ export function SetupWizardForm() {
                           : values.accentColor
                       }
                     />
-                    <SummaryItem
-                      label="Modules"
-                      value={selectedModules.length > 0 ? selectedModules.join(", ") : "Geen"}
-                    />
-                    <SummaryItem label="Talen" value={activeLocales.join(", ")} />
+                  </div>
+
+                  <div className="rounded-[1.6rem] border border-primary/20 bg-primary/7 p-5">
+                    <h3 className="font-semibold text-foreground">Setup voltooid!</h3>
+                    <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                      Your starter is configured and ready to launch. Click below to save your configuration
+                      and get deployment instructions.
+                    </p>
+                  </div>
+
+                  <div className="rounded-[1.5rem] border border-border/60 bg-muted/40 p-5">
+                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
+                      Volgende stappen
+                    </p>
+                    <div className="mt-4 space-y-3">
+                      {[
+                        "Sla je configuratie op met de knop hieronder.",
+                        "Volg de deployment-instructies naar je Vercel project.",
+                        "Je site zal direct beschikbaar zijn op je custom domein.",
+                      ].map((item) => (
+                        <div key={item} className="flex items-start gap-3">
+                          <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                          <p className="text-sm leading-6 text-muted-foreground">{item}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="rounded-[1.6rem] border border-primary/20 bg-primary/7 p-5">
@@ -1079,8 +900,8 @@ export function SetupWizardForm() {
                           Klaar om de configuratie op te slaan.
                         </p>
                         <p className="mt-2 text-sm leading-7 text-muted-foreground">
-                          Na opslaan wordt deze blueprint gebruikt als runtime basis voor site-instellingen,
-                          auth-voorkeuren en locale-setup.
+                          Na opslaan wordt deze blueprint gebruikt als runtime basis voor site-instellingen en
+                          branding.
                         </p>
                       </div>
                       <Button
@@ -1200,47 +1021,6 @@ function OptionCard({
           {badge}
         </p>
       ) : null}
-    </button>
-  )
-}
-
-function ToggleCard({
-  title,
-  description,
-  checked,
-  onChange,
-}: {
-  title: string
-  description: string
-  checked: boolean
-  onChange: (checked: boolean) => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={() => onChange(!checked)}
-      className={cn(
-        "flex items-center justify-between gap-4 rounded-[1.4rem] border px-4 py-4 text-left transition-all",
-        checked ? "border-primary bg-primary/7" : "border-border/60 bg-card/65 hover:bg-card/85"
-      )}
-    >
-      <div>
-        <p className="text-base font-semibold text-foreground">{title}</p>
-        <p className="mt-1 text-sm leading-6 text-muted-foreground">{description}</p>
-      </div>
-      <span
-        className={cn(
-          "relative inline-flex h-7 w-12 shrink-0 rounded-full transition-colors",
-          checked ? "bg-primary" : "bg-muted"
-        )}
-      >
-        <span
-          className={cn(
-            "absolute top-1 size-5 rounded-full bg-white transition-transform",
-            checked ? "translate-x-6" : "translate-x-1"
-          )}
-        />
-      </span>
     </button>
   )
 }

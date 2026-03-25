@@ -148,6 +148,7 @@ model WizardConfig {
   adminPasswordHash String
   databaseProvider  String
   databaseUrl       String
+  supabaseProjectId String?
   industry          String
   accentColor       String
   accentColorDark   String?

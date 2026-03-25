@@ -19,7 +19,9 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL ?? defaultDatabaseUrl,
 })
 
-const adapter = new PrismaPg(pool)
+// Type cast to resolve adapter compatibility
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapter = new PrismaPg(pool as any)
 
 const prisma = new PrismaClient({
   adapter,

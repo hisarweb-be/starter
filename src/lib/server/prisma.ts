@@ -11,11 +11,12 @@ const globalForPrisma = globalThis as typeof globalThis & {
 
 const pool =
   globalForPrisma.prismaPool ??
-  new Pool({
+  (new Pool({
     connectionString:
       process.env.DATABASE_URL ??
       "postgresql://postgres:postgres@localhost:5432/hisarweb",
-  })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  }) as any)
 
 const adapter = new PrismaPg(pool)
 
