@@ -23,6 +23,7 @@ type WizardConfigRecord = {
   databaseUrl: string
   industry: string
   accentColor: string
+  accentColorDark: string | null
   logoUrl: string | null
   fontPreset: string
   themeMode: string
@@ -43,6 +44,7 @@ function normalizeWizardRecord(record: {
   databaseUrl: string
   industry: string
   accentColor: string
+  accentColorDark?: string | null
   logoUrl: string | null
   fontPreset: string
   themeMode: string
@@ -62,6 +64,7 @@ function normalizeWizardRecord(record: {
     databaseUrl: record.databaseUrl,
     industry: record.industry,
     accentColor: record.accentColor,
+    accentColorDark: record.accentColorDark ?? "",
     logoUrl: record.logoUrl ?? "",
     fontPreset: record.fontPreset,
     themeMode: record.themeMode as "light" | "dark" | "system",
@@ -135,6 +138,7 @@ export async function saveWizardConfig(input: WizardConfig) {
           databaseUrl: persisted.databaseUrl,
           industry: persisted.industry,
           accentColor: persisted.accentColor,
+          accentColorDark: persisted.accentColorDark ?? null,
           logoUrl: persisted.logoUrl,
           fontPreset: persisted.fontPreset,
           themeMode: persisted.themeMode,
@@ -154,6 +158,7 @@ export async function saveWizardConfig(input: WizardConfig) {
           databaseUrl: persisted.databaseUrl,
           industry: persisted.industry,
           accentColor: persisted.accentColor,
+          accentColorDark: persisted.accentColorDark ?? null,
           logoUrl: persisted.logoUrl,
           fontPreset: persisted.fontPreset,
           themeMode: persisted.themeMode,

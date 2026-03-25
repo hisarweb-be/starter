@@ -150,6 +150,7 @@ model WizardConfig {
   databaseUrl       String
   industry          String
   accentColor       String
+  accentColorDark   String?
   logoUrl           String?
   fontPreset        String
   themeMode         String   @default("system")

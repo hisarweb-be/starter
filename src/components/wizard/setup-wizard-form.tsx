@@ -182,6 +182,12 @@ const themeModes = [
   { value: "dark", label: "Donker", description: "Meer contrast en een meer uitgesproken productgevoel." },
 ] as const
 
+const fontVariableMap: Record<string, string> = {
+  manrope: "var(--font-manrope), system-ui, sans-serif",
+  geist: "var(--font-geist-sans), system-ui, sans-serif",
+  inter: "var(--font-inter), system-ui, sans-serif",
+}
+
 const stepIcons = [Sparkles, Database, Wand2, Palette, Layers3, ShieldCheck, Globe2, Rocket]
 
 export function SetupWizardForm() {
@@ -325,12 +331,19 @@ export function SetupWizardForm() {
 
   async function handleSubmit(submittedValues: WizardConfigInput) {
     startTransition(async () => {
-      const result = await saveWizardConfigAction(submittedValues)
-      setResultMessage(result.message)
-      setResultState(result.success ? "success" : "error")
+      try {
+        const result = await saveWizardConfigAction(submittedValues)
+        setResultMessage(result.message)
+        setResultState(result.success ? "success" : "error")
 
-      if (result.success) {
-        window.localStorage.removeItem(STORAGE_KEY)
+        if (result.success) {
+          window.localStorage.removeItem(STORAGE_KEY)
+        }
+      } catch {
+        setResultMessage(
+          "Er ging iets mis bij het opslaan. Controleer de databaseverbinding en probeer opnieuw."
+        )
+        setResultState("error")
       }
     })
   }
@@ -588,144 +601,222 @@ export function SetupWizardForm() {
 
               {currentStep === 3 ? (
                 <div className="space-y-6">
-                  <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-                    <div className="space-y-6">
-                      <Field>
-                        <Label htmlFor="accentColor">Accent kleur</Label>
-                        <div className="flex items-center gap-3">
-                          <Input
-                            id="accentColor"
-                            type="color"
-                            {...form.register("accentColor")}
-                            className="h-12 w-16 rounded-2xl bg-background/75 p-2"
+                  {/* — Live Preview — */}
+                  <div className="rounded-[1.6rem] border border-border/60 bg-card/70 p-5">
+                    <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
+                      Live preview
+                    </p>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      {/* Light preview */}
+                      <div className="rounded-[1.25rem] border border-border/40 bg-white p-4">
+                        <p className="mb-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-zinc-400">
+                          Light mode
+                        </p>
+                        <div
+                          className="rounded-xl px-4 py-4 text-white shadow-sm"
+                          style={{
+                            backgroundColor: values.accentColor,
+                            fontFamily: fontVariableMap[values.fontPreset] ?? fontVariableMap.manrope,
+                          }}
+                        >
+                          <p className="text-lg font-semibold">
+                            {values.siteName || "Starter"}
+                          </p>
+                          <p className="mt-1 text-sm text-white/80">
+                            Premium starter, klaar voor launch.
+                          </p>
+                        </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          <span className="size-3 rounded-full" style={{ backgroundColor: values.accentColor }} />
+                          <span className="font-mono text-xs text-zinc-500">{values.accentColor}</span>
+                          <span className="ml-auto text-xs text-zinc-400">{values.fontPreset}</span>
+                        </div>
+                      </div>
+                      {/* Dark preview */}
+                      <div className="rounded-[1.25rem] border border-zinc-700/60 bg-zinc-950 p-4">
+                        <p className="mb-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-zinc-500">
+                          Dark mode
+                        </p>
+                        <div
+                          className="rounded-xl px-4 py-4 text-white shadow-sm"
+                          style={{
+                            backgroundColor: values.accentColorDark || values.accentColor,
+                            fontFamily: fontVariableMap[values.fontPreset] ?? fontVariableMap.manrope,
+                          }}
+                        >
+                          <p className="text-lg font-semibold">
+                            {values.siteName || "Starter"}
+                          </p>
+                          <p className="mt-1 text-sm text-white/80">
+                            Premium starter, klaar voor launch.
+                          </p>
+                        </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          <span
+                            className="size-3 rounded-full"
+                            style={{ backgroundColor: values.accentColorDark || values.accentColor }}
                           />
-                          <Input
-                            value={values.accentColor}
-                            onChange={(event) =>
-                              form.setValue("accentColor", event.target.value, {
+                          <span className="font-mono text-xs text-zinc-500">
+                            {values.accentColorDark || values.accentColor}
+                          </span>
+                          <span className="ml-auto text-xs text-zinc-500">{values.fontPreset}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* — Accent kleuren — */}
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <Field>
+                      <Label htmlFor="accentColor">Accent kleur (licht)</Label>
+                      <div className="flex items-center gap-3">
+                        <Input
+                          id="accentColor"
+                          type="color"
+                          {...form.register("accentColor")}
+                          className="h-11 w-14 rounded-2xl bg-background/75 p-1.5"
+                        />
+                        <Input
+                          value={values.accentColor}
+                          onChange={(event) =>
+                            form.setValue("accentColor", event.target.value, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            })
+                          }
+                          className="h-11 rounded-2xl bg-background/75 font-mono"
+                        />
+                      </div>
+                      <div className="mt-2.5 flex flex-wrap gap-2">
+                        {brandPalettes.map((palette) => (
+                          <button
+                            key={palette.color}
+                            type="button"
+                            onClick={() =>
+                              form.setValue("accentColor", palette.color, {
                                 shouldDirty: true,
                                 shouldValidate: true,
                               })
                             }
-                            className="h-11 rounded-2xl bg-background/75 font-mono"
+                            className={cn(
+                              "size-8 rounded-full border-2 border-white/80 shadow-sm transition-transform",
+                              values.accentColor === palette.color ? "scale-110 ring-4 ring-primary/20" : ""
+                            )}
+                            style={{ backgroundColor: palette.color }}
+                            aria-label={palette.name}
                           />
-                        </div>
-                        <div className="mt-3 flex flex-wrap gap-3">
-                          {brandPalettes.map((palette) => (
-                            <button
-                              key={palette.color}
-                              type="button"
-                              onClick={() =>
-                                form.setValue("accentColor", palette.color, {
-                                  shouldDirty: true,
-                                  shouldValidate: true,
-                                })
-                              }
-                              className={cn(
-                                "size-9 rounded-full border-2 border-white/80 shadow-sm",
-                                values.accentColor === palette.color ? "scale-110 ring-4 ring-primary/20" : ""
-                              )}
-                              style={{ backgroundColor: palette.color }}
-                              aria-label={palette.name}
-                            />
-                          ))}
-                        </div>
-                        <FieldError message={form.formState.errors.accentColor?.message} />
-                      </Field>
-                      <div className="space-y-3">
-                        <Label>Thema modus</Label>
-                        <div className="grid gap-3 md:grid-cols-3">
-                          {themeModes.map((mode) => (
-                            <OptionCard
-                              key={mode.value}
-                              active={values.themeMode === mode.value}
-                              onClick={() =>
-                                form.setValue("themeMode", mode.value, {
-                                  shouldDirty: true,
-                                  shouldValidate: true,
-                                })
-                              }
-                              title={mode.label}
-                              description={mode.description}
-                            />
-                          ))}
-                        </div>
+                        ))}
                       </div>
+                      <FieldError message={form.formState.errors.accentColor?.message} />
+                    </Field>
 
-                      <div className="space-y-3">
-                        <Label>Font preset</Label>
-                        <div className="grid gap-3 md:grid-cols-3">
-                          {wizardFontOptions.map((font) => (
-                            <OptionCard
-                              key={font.value}
-                              active={values.fontPreset === font.value}
-                              onClick={() =>
-                                form.setValue("fontPreset", font.value, {
-                                  shouldDirty: true,
-                                  shouldValidate: true,
-                                })
-                              }
-                              title={font.label}
-                              description={font.description}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div className="rounded-[1.6rem] border border-border/60 bg-card/70 p-5">
-                        <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-muted-foreground">
-                          Live direction
-                        </p>
-                        <div
-                          className={cn(
-                            "mt-4 rounded-[1.5rem] border border-border/60 p-5 transition-colors duration-300",
-                            values.themeMode === "dark"
-                              ? "bg-zinc-950 text-white"
-                              : values.themeMode === "light"
-                                ? "bg-white text-zinc-900"
-                                : "bg-background"
-                          )}
-                        >
-                          <div
-                            className="rounded-[1.25rem] px-4 py-5 text-white shadow-sm"
-                            style={{
-                              backgroundColor: values.accentColor,
-                              fontFamily: values.fontPreset === "geist" ? "var(--font-geist-sans), system-ui" : values.fontPreset === "inter" ? "Inter, system-ui" : "Manrope, system-ui",
-                            }}
-                          >
-                            <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-white/70">
-                              Preview
-                            </p>
-                            <p className="mt-2 text-2xl font-semibold">
-                              {values.siteName || "HisarWeb Starter"}
-                            </p>
-                            <p className="mt-2 text-sm text-white/80">
-                              Premium starter, klaar voor setup, content en launch.
-                            </p>
-                          </div>
-                          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                            <SummaryPreview label="Thema" value={values.themeMode} />
-                            <SummaryPreview label="Font" value={values.fontPreset} />
-                          </div>
-                        </div>
-                      </div>
-
-                      <Field>
-                        <Label htmlFor="logoUrl">Logo</Label>
-                        <LogoUploadField
-                          value={values.logoUrl ?? ""}
-                          onChange={(nextValue) => {
-                            form.setValue("logoUrl", nextValue, {
+                    <Field>
+                      <Label htmlFor="accentColorDark">Accent kleur (donker)</Label>
+                      <div className="flex items-center gap-3">
+                        <Input
+                          id="accentColorDark"
+                          type="color"
+                          value={values.accentColorDark || values.accentColor}
+                          onChange={(event) =>
+                            form.setValue("accentColorDark", event.target.value, {
                               shouldDirty: true,
                               shouldValidate: true,
                             })
-                          }}
+                          }
+                          className="h-11 w-14 rounded-2xl bg-background/75 p-1.5"
                         />
-                      </Field>
+                        <Input
+                          value={values.accentColorDark || values.accentColor}
+                          onChange={(event) =>
+                            form.setValue("accentColorDark", event.target.value, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            })
+                          }
+                          className="h-11 rounded-2xl bg-background/75 font-mono"
+                        />
+                      </div>
+                      <div className="mt-2.5 flex flex-wrap gap-2">
+                        {brandPalettes.map((palette) => (
+                          <button
+                            key={`dark-${palette.color}`}
+                            type="button"
+                            onClick={() =>
+                              form.setValue("accentColorDark", palette.color, {
+                                shouldDirty: true,
+                                shouldValidate: true,
+                              })
+                            }
+                            className={cn(
+                              "size-8 rounded-full border-2 border-white/80 shadow-sm transition-transform",
+                              (values.accentColorDark || values.accentColor) === palette.color
+                                ? "scale-110 ring-4 ring-primary/20"
+                                : ""
+                            )}
+                            style={{ backgroundColor: palette.color }}
+                            aria-label={`Dark: ${palette.name}`}
+                          />
+                        ))}
+                      </div>
+                      <FieldError message={form.formState.errors.accentColorDark?.message} />
+                    </Field>
+                  </div>
+
+                  {/* — Thema modus — */}
+                  <div className="space-y-3">
+                    <Label>Thema modus</Label>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      {themeModes.map((mode) => (
+                        <OptionCard
+                          key={mode.value}
+                          active={values.themeMode === mode.value}
+                          onClick={() =>
+                            form.setValue("themeMode", mode.value, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            })
+                          }
+                          title={mode.label}
+                          description={mode.description}
+                        />
+                      ))}
                     </div>
                   </div>
+
+                  {/* — Font preset — */}
+                  <div className="space-y-3">
+                    <Label>Font preset</Label>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      {wizardFontOptions.map((font) => (
+                        <OptionCard
+                          key={font.value}
+                          active={values.fontPreset === font.value}
+                          onClick={() =>
+                            form.setValue("fontPreset", font.value, {
+                              shouldDirty: true,
+                              shouldValidate: true,
+                            })
+                          }
+                          title={font.label}
+                          description={font.description}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* — Logo — */}
+                  <Field>
+                    <Label htmlFor="logoUrl">Logo</Label>
+                    <LogoUploadField
+                      value={values.logoUrl ?? ""}
+                      onChange={(nextValue) => {
+                        form.setValue("logoUrl", nextValue, {
+                          shouldDirty: true,
+                          shouldValidate: true,
+                        })
+                      }}
+                    />
+                  </Field>
                 </div>
               ) : null}
 
@@ -892,7 +983,14 @@ export function SetupWizardForm() {
                     />
                     <SummaryItem label="Sector" value={selectedPreset.title} />
                     <SummaryItem label="Branding" value={`${values.fontPreset} · ${values.themeMode}`} />
-                    <SummaryItem label="Accent" value={values.accentColor} />
+                    <SummaryItem
+                      label="Accent"
+                      value={
+                        values.accentColorDark
+                          ? `${values.accentColor} / ${values.accentColorDark}`
+                          : values.accentColor
+                      }
+                    />
                     <SummaryItem
                       label="Modules"
                       value={selectedModules.length > 0 ? selectedModules.join(", ") : "Geen"}
