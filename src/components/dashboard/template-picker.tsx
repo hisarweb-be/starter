@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { FileText, Layout, Briefcase, Sparkles } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { blockTemplates, type BlockTemplate } from "@/lib/block-templates"
 import { cn } from "@/lib/utils"
 

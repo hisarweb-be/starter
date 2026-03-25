@@ -1,8 +1,7 @@
 import type { MapBlockData } from "./types"
 
 export function MapBlockComponent({ title, latitude, longitude, zoom = 14, caption }: MapBlockData) {
-  const zoomLevel = zoom ?? 14
-  const embedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${longitude - 0.01},${latitude - 0.01},${longitude + 0.01},${latitude + 0.01}&layer=mapnik&marker=${latitude},${longitude}`
+  const embedUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${longitude - 0.01},${latitude - 0.01},${longitude + 0.01},${latitude + 0.01}&layer=mapnik&marker=${latitude},${longitude}&zoom=${zoom}`
 
   return (
     <section className="mx-auto w-full max-w-4xl px-4 py-16">

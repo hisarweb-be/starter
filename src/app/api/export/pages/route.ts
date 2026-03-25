@@ -20,7 +20,7 @@ type PageRecord = {
   updatedAt: Date
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const session = await auth()
   if (!session?.user) {
     return NextResponse.json({ error: "Niet geautoriseerd" }, { status: 401 })

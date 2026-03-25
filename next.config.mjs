@@ -1,5 +1,4 @@
 import createNextIntlPlugin from "next-intl/plugin"
-import type { NextConfig } from "next"
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts")
 
@@ -23,20 +22,14 @@ const cspDirectives = [
 ].join("; ")
 
 const securityHeaders = [
-  // Prevent clickjacking
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  // Prevent MIME type sniffing
   { key: "X-Content-Type-Options", value: "nosniff" },
-  // Control referrer information
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  // Restrict browser features
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), payment=()",
   },
-  // Prevent XSS attacks (legacy browsers)
   { key: "X-XSS-Protection", value: "1; mode=block" },
-  // Enable HSTS (only in production with HTTPS)
   ...(process.env.NODE_ENV === "production"
     ? [
         {
@@ -45,11 +38,11 @@ const securityHeaders = [
         },
       ]
     : []),
-  // Content Security Policy
   { key: "Content-Security-Policy", value: cspDirectives },
 ]
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   output: "standalone",
   images: {
     remotePatterns: [
@@ -65,7 +58,6 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
-      // More restrictive headers for API routes
       {
         source: "/api/:path*",
         headers: [
@@ -76,7 +68,6 @@ const nextConfig: NextConfig = {
       },
     ]
   },
-  // Disable X-Powered-By header
   poweredByHeader: false,
 }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { useRouter } from "next/navigation"
 import {
   LayoutDashboard,
   FileText,
@@ -12,7 +12,6 @@ import {
   Settings,
   Plus,
   Upload,
-  Search,
   Activity,
   Package,
 } from "lucide-react"
