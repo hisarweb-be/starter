@@ -25,7 +25,7 @@ export const wizardConfigSchema = z.object({
   databaseUrl: z.string().min(3, "Database connection is required"),
   industry: z.string().min(2, "Industry is required"),
   accentColor: z.string().min(4, "Accent color is required"),
-  accentColorDark: z.string().min(4).optional().default(""),
+  accentColorDark: z.string().optional().default(""),
   logoUrl: z.string().optional().default(""),
   fontPreset: z.string().min(2, "Font preset is required"),
   themeMode: z.enum(["light", "dark", "system"]),
@@ -40,7 +40,8 @@ export const wizardConfigSchema = z.object({
 export type WizardConfigInput = z.input<typeof wizardConfigSchema>
 export type WizardConfig = z.output<typeof wizardConfigSchema>
 
-export const wizardDefaultValues: WizardConfig = {
+/** Form defaults — NOT a valid config (password is empty until user fills it in) */
+export const wizardDefaultValues: WizardConfigInput = {
   siteName: "HisarWeb Starter",
   adminEmail: "admin@hisarweb.be",
   adminPassword: "",
