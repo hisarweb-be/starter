@@ -22,20 +22,18 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  // Setup guard: redirect to /setup if not yet configured
-  const isSetupComplete = process.env.NEXT_PUBLIC_SETUP_COMPLETE === "true"
-
-  if (!isSetupComplete && !pathname.startsWith("/setup")) {
-    return NextResponse.redirect(new URL("/setup", request.url))
-  }
-
-  // Setup wizard is always accessible for re-configuration
-
   // For /setup route, skip i18n middleware
   if (pathname.startsWith("/setup")) {
     const response = NextResponse.next()
     applySecurityHeaders(response)
     return response
+  }
+
+  // Setup guard: redirect to /setup if not yet configured
+  const isSetupComplete = process.env.NEXT_PUBLIC_SETUP_COMPLETE === "true"
+
+  if (!isSetupComplete && !pathname.startsWith("/setup")) {
+    return NextResponse.redirect(new URL("/setup", request.url))
   }
 
   // Subdomain / tenant resolution

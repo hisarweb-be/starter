@@ -9,6 +9,8 @@ import { UpdateBanner } from "@/components/dashboard/update-banner"
 import { getLatestReleaseInfo, formatChangelog } from "@/lib/server/release-checker"
 import { isValidLocale } from "@/lib/site"
 
+export const dynamic = "force-dynamic"
+
 export default async function DashboardOverviewPage({
   params,
 }: {

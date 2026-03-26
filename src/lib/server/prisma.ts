@@ -15,8 +15,15 @@ const pool =
     connectionString:
       process.env.DATABASE_URL ??
       "postgresql://postgres:postgres@localhost:5432/hisarweb",
+    connectionTimeoutMillis: 5000,
+    max: 3,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any)
+
+// Prevent uncaught pool errors from crashing the process (e.g. during CI builds)
+pool.on("error", () => {
+  // Silently handled — connection errors are caught by withPersistenceFallback
+})
 
 const adapter = new PrismaPg(pool)
 

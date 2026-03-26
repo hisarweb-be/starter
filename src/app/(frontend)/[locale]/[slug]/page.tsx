@@ -9,6 +9,8 @@ import { prisma } from "@/lib/server/prisma"
 import { getActiveOrganization } from "@/lib/server/tenant-runtime"
 import type { PageBlockLike } from "@/components/blocks/types"
 
+export const dynamic = "force-dynamic"
+
 type PageRecord = {
   id: string
   title: string
