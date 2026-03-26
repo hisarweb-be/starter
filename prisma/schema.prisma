@@ -206,6 +206,17 @@ model UpdateLog {
   createdAt    DateTime @default(now())
 }
 
+model LatestRelease {
+  id            String   @id @default("singleton")
+  tag           String   // e.g., "v1.2.3"
+  releaseNotes  String?
+  releaseUrl    String?
+  downloadUrl   String?
+  checkedAt     DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 model ActivityLog {
   id             String   @id @default(cuid())
   organizationId String?

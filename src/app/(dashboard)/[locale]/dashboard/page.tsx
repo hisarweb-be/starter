@@ -5,6 +5,8 @@ import Link from "next/link"
 import { auth } from "@/auth"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PageHeader } from "@/components/dashboard/page-header"
+import { UpdateBanner } from "@/components/dashboard/update-banner"
+import { getLatestReleaseInfo, formatChangelog } from "@/lib/server/release-checker"
 import { isValidLocale } from "@/lib/site"
 
 export default async function DashboardOverviewPage({
@@ -17,6 +19,10 @@ export default async function DashboardOverviewPage({
 
   const session = await auth()
   const name = session?.user?.name ?? "daar"
+
+  // Get latest release info for update banner
+  const latestRelease = await getLatestReleaseInfo()
+  const currentVersion = "1.0.0" // From package.json
 
   const quickActions = [
     {
@@ -51,6 +57,15 @@ export default async function DashboardOverviewPage({
         title={`Welkom, ${name}!`}
         description="Beheer content, branding en modules vanuit een consistente premium workspace."
       />
+
+      {latestRelease && (
+        <UpdateBanner
+          currentVersion={currentVersion}
+          latestTag={latestRelease.tag}
+          releaseUrl={latestRelease.releaseUrl}
+          changelog={formatChangelog(latestRelease.releaseNotes)}
+        />
+      )}
 
       <div className="grid gap-4 md:grid-cols-2">
         {quickActions.map((action) => (
