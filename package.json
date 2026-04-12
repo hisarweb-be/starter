@@ -95,7 +95,10 @@
     "vitest": "^4.0.18"
   },
   "description": "Modern website starter kit met setup wizard - Powered by Next.js 15",
-  "author": "HisarWeb Design | Digital Partner <info@hisarweb.be> (https://www.hisarweb.be)",
+  "author": "H. Altuner <info@hisarweb.be> (https://www.hisarweb.be)",
+  "contributors": [
+    { "name": "Hisar Group BV", "url": "https://www.hisarweb.be" }
+  ],
   "license": "MIT",
   "homepage": "https://www.hisarweb.be"
 }

@@ -1,0 +1,16 @@
+/* TEAM */
+Chef: H. Altuner
+Site: https://www.hisarweb.be
+Contact: info@hisarweb.be
+Twitter: @hisarweb
+
+/* SITE */
+Last update: 2026/04/12
+Language: Dutch / Nederlands
+Doctype: HTML5
+Standards: HTML5, CSS3, ES2024
+Software: Next.js 15, React 19, TypeScript, Prisma, Payload CMS, Tailwind CSS 4
+
+/* THANKS */
+HisarWeb — Hisar Group BV
+© Alle rechten voorbehouden

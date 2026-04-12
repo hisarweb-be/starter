@@ -16,8 +16,11 @@ export const siteConfig = {
   name: "HisarWeb Starter",
   shortName: "HisarWeb",
   description:
-    "Deploy-ready website starter met setup wizard, meertalige frontend en Payload-first architectuur.",
-  company: "HisarWeb Design",
+    "Deploy-ready website starter met setup wizard, meertalige frontend en Payload-first architectuur. Ontwikkeld door H. Altuner — www.hisarweb.be",
+  company: "Hisar Group BV",
+  owner: "H. Altuner",
+  ownerUrl: "https://www.hisarweb.be",
+  contact: "info@hisarweb.be",
   url: "https://www.hisarweb.be",
 }
 

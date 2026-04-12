@@ -39,6 +39,13 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   metadataBase,
   manifest: "/manifest.webmanifest",
+  applicationName: siteConfig.name,
+  authors: [
+    { name: "H. Altuner - www.hisarweb.be", url: siteConfig.ownerUrl },
+    { name: "Hisar Group BV", url: siteConfig.url },
+  ],
+  creator: "H. Altuner",
+  publisher: "Hisar Group BV",
   appleWebApp: {
     capable: true,
     title: siteConfig.shortName,
@@ -46,6 +53,16 @@ export const metadata: Metadata = {
   },
   formatDetection: {
     telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "HisarWeb",
+    locale: "nl_BE",
+    url: siteConfig.url,
+  },
+  other: {
+    copyright: "H. Altuner",
+    "og:see_also": siteConfig.url,
   },
 }
 
@@ -56,6 +73,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="nl" suppressHydrationWarning>
+      <head>
+        {/*
+          HisarWeb — Hisar Group BV
+          Eigenaar: H. Altuner
+          https://www.hisarweb.be
+          © Alle rechten voorbehouden
+        */}
+        <link rel="author" href="https://www.hisarweb.be" />
+        <link rel="author" type="text/plain" href="/humans.txt" />
+      </head>
       <body
         className={`${manrope.variable} ${sora.variable} ${inter.variable} ${GeistSans.variable} ${ibmPlexMono.variable} bg-background text-foreground antialiased`}
       >
