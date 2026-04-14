@@ -108,6 +108,8 @@ curl http://localhost:3000/api/health
 | `npm run lint` | ESLint check |
 | `npm run typecheck` | TypeScript validation |
 | `npm run verify` | Run lint, typecheck and build sequentially |
+| `npm run release:verify` | Full verification: lint + typecheck + test + build |
+| `npm run safepush` | `release:verify` then `git push` — use instead of plain `git push` |
 | `npm run test` | Run unit tests (Vitest) |
 | `npm run test:e2e` | Run Playwright E2E tests |
 | `npm run test:e2e:headed` | Run Playwright E2E tests with a visible browser |
@@ -168,6 +170,8 @@ Playwright resets local fallback data, builds the app and starts the standalone 
 ---
 
 ## Deployment
+
+> **Local CI:** GitHub Actions is disabled (quota exhausted). Use `npm run safepush` instead of `git push` to run lint, typecheck, tests and build locally before deploying.
 
 ### Vercel
 
